@@ -1,18 +1,28 @@
-const remoteURL = "http://localhost:5002"
+import APIManager from "./APIManager"
 
-export default {
-  get(id) {
-    return fetch(`${remoteURL}/animals/${id}`).then(e => e.json())
-  },
-  getAll() {
-    return fetch(`${remoteURL}/animals`).then(e => e.json())
-  },
-  removeAndList(id) {
-    return fetch(`${remoteURL}/animals/${id}`, {
-      method: "DELETE"
-    })
-      .then(e => e.json())
-      .then(() => fetch(`http://localhost:5002/animals`))
-      .then(e => e.json())
+class AnimalManager extends APIManager {
+  getAnimal(id) {
+    return this.get(id)
   }
+  getAll() {
+    return this.all()
+  }
+  removeAndList(id) {
+    return this.delete(id).then(() => this.all())
+  }
+
+  // removeAndList(id) {
+  //   return this.delete(id).then(() => this.all())
+  // }
 }
+
+export default new AnimalManager("animals")
+
+// import APIManager from "./APIManager"
+// /*
+//     Remember that extending a Class means that
+//     it will be in this class's prototype chain.
+// */
+// class AnimalManager extends APIManager {
+//     ...
+// }
